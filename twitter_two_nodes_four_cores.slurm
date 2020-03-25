@@ -2,11 +2,13 @@
 # 2 nodes, 4 tasks per node = 8 cores
 #SBATCH --nodes=2
 #SBATCH --ntasks-per-node=4
+#SBATCH --cpus-per-task=1
+#SBATCH --job-name=twitter_two_nodes_four_cores
 #SBATCH --time=0-12:00:00
 #SBATCH --partition=physical
 
 # Load required modules
-module load Python/3.5.2-goolf-2015a 
+module load Python/3.7.1-GCC-6.2.0
 
 # Launch twitter analyzer process
 echo "Analyzing twitter data..."
