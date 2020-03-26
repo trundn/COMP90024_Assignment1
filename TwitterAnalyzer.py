@@ -1,7 +1,7 @@
 # Message Passing Interface (MPI) standard.
 from mpi4py import MPI
 # Command line argument parser.
-import getopt
+import sys, getopt
 # Json parser and time calculation. 
 import json, time
 
@@ -12,9 +12,10 @@ def parse_arguments(argv):
 
   ## Try to parse command line arguments
   try:
-    opts, args = getopt.getopt(argv,"cd:")
+    opts, args = getopt.getopt(argv,"c:d:")
   except getopt.GetoptError as error:
     sys.exit(2)
+    
   for opt, arg in opts:
     if opt in '-c':
       config_path = arg
@@ -24,9 +25,10 @@ def parse_arguments(argv):
   # Return all arguments
   return config_path, data_path
 
-def load_language_config():
-    with open("") as f:
-        config_content = json.load(f.read())
+def load_language_config(file_path):
+    with open(file_path) as f:
+        config_content = json.loads(f.read())
+        return config_content["langs"]      
 
 def process_tweets(rank, data_path, processes):
     with open(data_path) as f:
@@ -60,12 +62,12 @@ def main(args):
         load_language_config(config_path)
         master_tweet_processor(comm, data_path)
         
-    else:
+    #else:
         # Perform tasks for slave nodes.
         slave_tweet_processor(comm, data_path)
 
 # Run the actual program
 if __name__ == "__main__":
   star_time = time.time()
-  main()
+  main(sys.argv[1:])
   print("Tottal processing time is : ", str(time.time() - star_time))
