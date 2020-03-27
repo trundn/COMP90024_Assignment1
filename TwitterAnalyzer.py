@@ -99,7 +99,7 @@ def analyze_tweet(text, language):
     lang_counter = None
 
     if (text):
-        # lower case for text content
+        # Convert text content to lower case
         text = text.lower()
         # Find all hashtags in the text content
         hashtags = re.findall(HASH_TAG_REGEX, text)
