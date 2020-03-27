@@ -30,9 +30,13 @@ JSON_LANGUAGES_PROPERTY = "langs"
 JSON_LANGUAGE_PROPERTY = "lang"
 JSON_NEW_LINE_STRING = ",\n"
 
-CMD_LINE_DEFINED_ARGUMENTS = "c:d:"
+CMD_LINE_DEFINED_ARGUMENTS = "hc:d:"
+HELP_ARGUMENT = "-h"
 LANG_CONFIG_ARGUMENT = "-c"
 TWEET_DATA_ARGUMENT = "-d"
+
+def print_usage():
+  print ('Usage is: TwitterAnalyzer.py -c <language configuration file path> -d <twitter data file path>')
 
 def parse_arguments(argv):
     # Initialise local variables
@@ -44,15 +48,19 @@ def parse_arguments(argv):
         opts, args = getopt.getopt(argv, CMD_LINE_DEFINED_ARGUMENTS)
     except getopt.GetoptError as error:
         print("Failed to parse comand line arguments. Error: %s" %error)
+        print_usage()
         sys.exit(2)
         
     # Extract argument values
     for opt, arg in opts:
+        if opt == HELP_ARGUMENT:
+            print_usage()
+            sys.exit()
         if opt in (LANG_CONFIG_ARGUMENT):
             config_path = arg
         elif opt in (TWEET_DATA_ARGUMENT):
             data_path = arg
-        
+
     # Return all arguments
     return config_path, data_path
 
@@ -159,6 +167,7 @@ def marshall_tweets(comm):
     for i in range(processor_size - 1):
         # Receive data
         analyzed_counters = comm.recv(source = (i + 1), tag = MASTER_RANK)
+        print("Received analyzed data from [%d] rank." %(i + 1))
 
         # Extract hashtag and language counters from return value
         hashtag_counter = analyzed_counters[HASHTAG_COUNTER_PROP]
@@ -171,10 +180,12 @@ def perform_tasks_master_node(comm, file_path):
     processor_size = comm.Get_size()
 
     # Extract hashtag and language from tweet data in master node
+    print("Performing analysis tasks on master node...")
     hashtag_counter, lang_counter = process_twitter_data(rank, file_path, processor_size)
 
     if processor_size > 1:
         # Gather hashtag and language counter from all salve nodes
+        print("Gathering analyzed data from all processors...")
         slave_hashtag_counter, slave_lang_counter = marshall_tweets(comm)
         
         # Put counters received from slave nodes to final counter results
@@ -182,6 +193,7 @@ def perform_tasks_master_node(comm, file_path):
         lang_counter += slave_lang_counter
 
         # Turn everything off
+        print("Sending exit request to all processors...")
         for i in range(processor_size - 1):
             # Send exit request
             comm.send(EXIT_REQ, dest = (i + 1), tag = (i + 1))
