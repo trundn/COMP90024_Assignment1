@@ -7,10 +7,8 @@
 #SBATCH --partition=physical
 
 # Load required modules
-module load Python/3.7.1-GCC-6.2.0
+module load Python/3.6.4-intel-2017.u2-GCC-6.2.0-CUDA9
 
 # Launch twitter analyzer process
 echo "Analyzing twitter data..."
 time mpiexec python3 TwitterAnalyzer.py -c languageConfig.json -d bigTwitter.json
-
-

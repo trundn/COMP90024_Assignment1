@@ -12,13 +12,14 @@ import sys, getopt
 import json, time
 
 # The constants definition
-FILE_ENCODING = "utf8"
+UTF8_ENCODING = "utf8"
 LANG_UNDEFINED = "Undefined"
 HASHTAG_COUNTER_PROP = "hashtag_prop"
 LANG_COUNTER_PROP = "lang_prop"
 
 HASH_TAG_REGEX = r"#(\w+)"
 MASTER_RANK = 0
+TOP_MOST_COMMON = 10
 
 RETURN_DATA_REQ = "return_data_req"
 EXIT_REQ = "exit_req"
@@ -110,7 +111,7 @@ def process_twitter_data(rank, data_path, processor_size):
     total_lang_counter = Counter([])
 
     if os.path.exists(data_path):
-        with open(data_path, encoding=FILE_ENCODING) as fstream:
+        with open(data_path, encoding=UTF8_ENCODING) as fstream:
             try:
                 for i, line in enumerate(fstream):
                     if (i % processor_size == rank):
@@ -235,7 +236,9 @@ def main(args):
                 hashtag_counter, lang_counter = perform_tasks_master_node(comm, data_path)
                 
                 # Print analysis result to console
-                print_analysis_result(hashtag_counter.most_common(10), lang_counter.most_common(10), lang_config)
+                print_analysis_result(
+                    hashtag_counter.most_common(TOP_MOST_COMMON),
+                    lang_counter.most_common(TOP_MOST_COMMON), lang_config)
         else:
             # Perform tasks for slave nodes.
             perform_tasks_slave_nodes(comm, data_path)
@@ -244,4 +247,4 @@ def main(args):
 if __name__ == "__main__":
     star_time = time.time()
     main(sys.argv[1:])
-    print("\nTottal processing time is : ", str(time.time() - star_time))
+    print("\nTotal processing time is : ", str(time.time() - star_time))

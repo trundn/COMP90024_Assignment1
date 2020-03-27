@@ -32,7 +32,13 @@
         "uk": "Ukrainian",
         "ur": "Urdu",
         "vi": "Vietnamese",
+        "zh": "Chinese",
         "zh-cn": "Chinese Simplified",
-        "zh-tw": "Chinese Traditional"
+        "zh-tw": "Chinese Traditional",
+        "cy": "Welsh",
+        "et": "Estonian",
+        "tl": "Tagalog",
+        "ht": "Haitian",
+        "in": "Hindi"
     }
 }
