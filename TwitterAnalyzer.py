@@ -2,7 +2,7 @@
 from mpi4py import MPI
 # Counting hashable objects.
 from collections import Counter
-# Regular expression operations
+# Regular expression operations.
 import re
 # Portable way of using system dependent functionality.
 import os
