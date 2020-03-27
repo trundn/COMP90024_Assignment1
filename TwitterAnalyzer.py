@@ -194,14 +194,14 @@ def perform_tasks_slave_nodes(comm, file_path):
     processor_size = comm.Get_size()
 
     # Initialise analyzed counters
-    analzyed_counters = {}
+    analyzed_counters = {}
 
     # Extract hashtag and language from tweet data in slave node
     hashtag_counter, lang_counter = process_twitter_data(rank, file_path, processor_size)
 
     # Put all counters in dictionary in order to send back to master node
-    analzyed_counters[HASHTAG_COUNTER_PROP] = hashtag_counter
-    analzyed_counters[LANG_COUNTER_PROP] = lang_counter
+    analyzed_counters[HASHTAG_COUNTER_PROP] = hashtag_counter
+    analyzed_counters[LANG_COUNTER_PROP] = lang_counter
 
     # Now that we have our counts then wait to see when we return them.
     while True:
@@ -210,7 +210,7 @@ def perform_tasks_slave_nodes(comm, file_path):
         if isinstance(request_command, str):
             if request_command in (RETURN_DATA_REQ):
                 # Send data back to master node
-                comm.send(analzyed_counters, dest = MASTER_RANK, tag = MASTER_RANK)
+                comm.send(analyzed_counters, dest = MASTER_RANK, tag = MASTER_RANK)
             elif request_command in (EXIT_REQ):
                 exit(0)
 
