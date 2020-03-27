@@ -66,7 +66,6 @@ def print_analysis_result(hashtag_counter, lang_counter, lang_config):
     for i, hashtag in enumerate(hashtag_counter):
         print("%d. #%s, %d" %(i + 1, hashtag[0], hashtag[1]))
 
-    
     # Print top 10 languages
     print("\nTop 10 most commonly used languages:")
     for i, lang in enumerate(lang_counter):
@@ -87,7 +86,6 @@ def analyze_tweet(text, language):
     if (text):
         # Find all hashtags in the text content
         hashtags = re.findall(HASH_TAG_REX, text)
-
         # Build counter for hashtags
         hashtag_counter = Counter(hashtags)
 
