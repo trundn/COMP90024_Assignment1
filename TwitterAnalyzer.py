@@ -18,7 +18,7 @@ HASHTAG_COUNTER_PROP = "hashtag_prop"
 LANG_COUNTER_PROP = "lang_prop"
 
 HASH_TAG_REGEX = r"#(\w+)"
-THOUDSAND_SEPARATOR = ","
+THOUSAND_SEPARATOR = ","
 MASTER_RANK = 0
 TOP_MOST_COMMON = 10
 
@@ -81,7 +81,7 @@ def print_analysis_result(hashtag_counter, lang_counter, lang_config):
     print("\nTop 10 most commonly used hashtags:")
     for i, hashtag in enumerate(hashtag_counter):
         print("%d. #%s, %s" %(i + 1, hashtag[0],
-            format(hashtag[1], THOUDSAND_SEPARATOR)))
+            format(hashtag[1], THOUSAND_SEPARATOR)))
 
     # Print top 10 languages
     print("\nTop 10 most commonly used languages:")
@@ -95,7 +95,7 @@ def print_analysis_result(hashtag_counter, lang_counter, lang_config):
             lang_name = LANG_UNDEFINED
 
         print("%d. %s (%s), %s" %(i + 1, lang_name, lang_code,
-            format(lang[1], THOUDSAND_SEPARATOR)))
+            format(lang[1], THOUSAND_SEPARATOR)))
 
 def analyze_tweet(text, language):
     hashtag_counter = None
