@@ -17,7 +17,6 @@ LANG_UNDEFINED = "Undefined"
 HASHTAG_COUNTER_PROP = "hashtag_prop"
 LANG_COUNTER_PROP = "lang_prop"
 
-HASH_TAG_REGEX = r"#(\w+)"
 THOUSAND_SEPARATOR = ","
 MASTER_RANK = 0
 TOP_MOST_COMMON = 10
@@ -26,6 +25,8 @@ RETURN_DATA_REQ = "return_data_req"
 EXIT_REQ = "exit_req"
 
 JSON_DOCUMENT = "doc"
+JSON_ENTITIES_PROPERTY = "entities"
+JSON_HASH_TAGS_PROPERTY = "hashtags"
 JSON_TEXT_PROPERTY = "text"
 JSON_LANGUAGES_PROPERTY = "langs"
 JSON_LANGUAGE_PROPERTY = "lang"
@@ -80,8 +81,7 @@ def print_analysis_result(hashtag_counter, lang_counter, lang_config):
     # Print top 10 hashtags
     print("\nTop 10 most commonly used hashtags:")
     for i, hashtag in enumerate(hashtag_counter):
-        print("%d. #%s, %s" %(i + 1, hashtag[0],
-            format(hashtag[1], THOUSAND_SEPARATOR)))
+        print(f"{i + 1}. #{hashtag[0]}, {format(hashtag[1], THOUSAND_SEPARATOR)}")
 
     # Print top 10 languages
     print("\nTop 10 most commonly used languages:")
@@ -94,32 +94,12 @@ def print_analysis_result(hashtag_counter, lang_counter, lang_config):
         else:
             lang_name = LANG_UNDEFINED
 
-        print("%d. %s (%s), %s" %(i + 1, lang_name, lang_code,
-            format(lang[1], THOUSAND_SEPARATOR)))
-
-def analyze_tweet(text, language):
-    hashtag_counter = None
-    lang_counter = None
-
-    if (text):
-        # Convert text content to lower case
-        text = text.lower()
-        # Find all hashtags in the text content
-        hashtags = re.findall(HASH_TAG_REGEX, text)
-        # Build counter for hashtags
-        hashtag_counter = Counter(hashtags)
-
-    if (language):
-        # Build counter for languages
-        lang_counter = Counter([language])
-
-    # Return all counters
-    return hashtag_counter, lang_counter
+        print(f"{i + 1}. {lang_name} ({lang_code}), {format(lang[1], THOUSAND_SEPARATOR)}")
 
 def process_twitter_data(rank, data_path, processor_size):
     # Initialise all counters
-    total_hashtag_counter = Counter([])
-    total_lang_counter = Counter([])
+    total_hashtag_counter = Counter()
+    total_lang_counter = Counter()
 
     if os.path.exists(data_path):
         with open(data_path, encoding=UTF8_ENCODING) as fstream:
@@ -131,16 +111,23 @@ def process_twitter_data(rank, data_path, processor_size):
                             try:
                                 # Load tweet into json document
                                 tweet = json.loads(line)
-                                # Extract text and language properties
-                                text = tweet[JSON_DOCUMENT][JSON_TEXT_PROPERTY]
+                                # Extract hashtags and language properties
+                                hashtags = tweet[JSON_DOCUMENT][JSON_ENTITIES_PROPERTY][JSON_HASH_TAGS_PROPERTY]
                                 language = tweet[JSON_DOCUMENT][JSON_LANGUAGE_PROPERTY]
-                                
-                                # Analyze tweet data
-                                hashtag_counter, lang_counter = analyze_tweet(text, language)
-                                
-                                # Update to total counters
-                                total_hashtag_counter += hashtag_counter
-                                total_lang_counter += lang_counter
+
+                                # Analyze hashtag property
+                                if (hashtags):
+                                    for hashtag in hashtags:
+                                        # Get hashtag text content
+                                        text = hashtag[JSON_TEXT_PROPERTY]
+                                        # Convert to lower case
+                                        text = text.lower()
+                                        # Update counter for hashtag
+                                        total_hashtag_counter[text] += 1
+
+                                # Update counter for language
+                                if (language):
+                                    total_lang_counter[language] += 1
                             except ValueError as error:
                                 print("Failed to decode JSON content from [%d] rank. Error: %s" %(rank, error))
                                 print("Processed tweet: %s" %line)
@@ -262,4 +249,4 @@ def main(args):
 if __name__ == "__main__":
     star_time = time.time()
     main(sys.argv[1:])
-    print("\nTotal processing time is : ", str(time.time() - star_time))
+    print("\nTotal processing time is : %s seconds" %(round(time.time() - star_time, 4)))

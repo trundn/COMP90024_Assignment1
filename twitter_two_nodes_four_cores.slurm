@@ -2,6 +2,7 @@
 # 2 nodes, 4 tasks per node = 8 cores
 #SBATCH --nodes=2
 #SBATCH --ntasks-per-node=4
+#SBATCH --cpus-per-task=1
 #SBATCH --job-name=twitter_two_nodes_four_cores
 #SBATCH --time=00:50:00
 #SBATCH --partition=physical
