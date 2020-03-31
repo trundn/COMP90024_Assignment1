@@ -156,8 +156,8 @@ def process_twitter_data(rank, data_path, processor_size):
 
 def marshall_tweets(comm):
     # Initialise all counters
-    hashtag_counter = None
-    lang_counter = None
+    hashtag_counter = Counter([])
+    lang_counter = Counter([])
 
     # Get the processor size
     processor_size = comm.Get_size()
@@ -173,8 +173,8 @@ def marshall_tweets(comm):
         print("Received analyzed data from [%d] rank." %(i + 1))
 
         # Extract hashtag and language counters from return value
-        hashtag_counter = analyzed_counters[HASHTAG_COUNTER_PROP]
-        lang_counter = analyzed_counters[LANG_COUNTER_PROP]
+        hashtag_counter += analyzed_counters[HASHTAG_COUNTER_PROP]
+        lang_counter += analyzed_counters[LANG_COUNTER_PROP]
 
     return hashtag_counter, lang_counter
 
