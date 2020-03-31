@@ -1,0 +1,65 @@
+Analyzing twitter data...
+--------------------------------------------------------------------------
+No OpenFabrics connection schemes reported that they were able to be
+used on a specific port.  As such, the openib BTL (OpenFabrics
+support) will be disabled for this port.
+
+  Local host:           spartan-bm059
+  Local device:         mlx5_bond_0
+  Local port:           1
+  CPCs attempted:       rdmacm
+--------------------------------------------------------------------------
+[spartan-bm059.hpc.unimelb.edu.au:31548] pml_ucx.c:223 Error: UCP worker does not support MPI_THREAD_MULTIPLE
+[spartan-bm059.hpc.unimelb.edu.au:31549] pml_ucx.c:223 Error: UCP worker does not support MPI_THREAD_MULTIPLE
+[spartan-bm059.hpc.unimelb.edu.au:31550] pml_ucx.c:223 Error: UCP worker does not support MPI_THREAD_MULTIPLE
+[spartan-bm059.hpc.unimelb.edu.au:31551] pml_ucx.c:223 Error: UCP worker does not support MPI_THREAD_MULTIPLE
+[spartan-bm028.hpc.unimelb.edu.au:10358] pml_ucx.c:223 Error: UCP worker does not support MPI_THREAD_MULTIPLE
+[spartan-bm028.hpc.unimelb.edu.au:10360] pml_ucx.c:223 Error: UCP worker does not support MPI_THREAD_MULTIPLE
+[spartan-bm028.hpc.unimelb.edu.au:10361] pml_ucx.c:223 Error: UCP worker does not support MPI_THREAD_MULTIPLE
+[spartan-bm028.hpc.unimelb.edu.au:10359] pml_ucx.c:223 Error: UCP worker does not support MPI_THREAD_MULTIPLE
+Performing analysis tasks on master node...
+Ignore header line.
+[spartan-bm028.hpc.unimelb.edu.au:10346] 7 more processes have sent help message help-mpi-btl-openib-cpc-base.txt / no cpcs for port
+[spartan-bm028.hpc.unimelb.edu.au:10346] Set MCA parameter "orte_base_help_aggregate" to 0 to see all help / error messages
+Failed to decode JSON content from [4] rank. Error: Expecting value: line 1 column 1 (char 0)
+Processed tweet: ]}
+
+Gathering analyzed data from all processors...
+Received analyzed data from [1] rank.
+Received analyzed data from [2] rank.
+Received analyzed data from [3] rank.
+Received analyzed data from [4] rank.
+Received analyzed data from [5] rank.
+Received analyzed data from [6] rank.
+Received analyzed data from [7] rank.
+Sending exit request to all processors...
+
+Top 10 most commonly used hashtags:
+1. #auspol, 19,878
+2. #coronavirus, 10,110
+3. #มาพ่องเพิ่งอะไร, 7,531
+4. #firefightaustralia, 6,812
+5. #oldme, 6,418
+6. #sydney, 6,196
+7. #scottyfrommarketing, 5,185
+8. #grammys, 5,085
+9. #assange, 4,689
+10. #sportsrorts, 4,516
+
+Top 10 most commonly used languages:
+1. English (en), 3,107,116
+2. Undefined (und), 252,117
+3. Thai (th), 134,571
+4. Portuguese (pt), 125,858
+5. Spanish (es), 74,028
+6. Japanese (ja), 49,929
+7. Tagalog (tl), 44,560
+8. Hindi (in), 42,296
+9. French (fr), 38,098
+10. Arabic (ar), 24,501
+
+Total processing time is : 164.6006 seconds
+
+real	2m45.985s
+user	10m25.451s
+sys	0m33.461s
