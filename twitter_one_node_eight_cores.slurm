@@ -4,6 +4,7 @@
 #SBATCH --job-name=twitter_one_node_eight_cores
 #SBATCH --time=00:50:00
 #SBATCH --partition=physical
+#SBATCH --constraint=physg4
 
 # Load required modules
 module load Python/3.6.4-intel-2017.u2-GCC-6.2.0-CUDA9
