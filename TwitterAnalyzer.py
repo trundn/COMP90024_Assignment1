@@ -1,17 +1,17 @@
-# Message Passing Interface (MPI) standard.
+# Message Passing Interface (MPI) standard libraries
 from mpi4py import MPI
-# Counting hashable objects.
+# Libraries to count hashable objects
 from collections import Counter
-# Regular expression operations.
+# Regular expression operations library
 import re
-# Portable way of using system dependent functionality.
+# Using libraries for system dependent functionalities
 import os
-# Command line argument parser.
+# Libraries for command line argument parsing
 import sys, getopt
-# Json parser and time calculation.
+# JSON parsing and time calculation libraries
 import json, time
 
-# The constants definition
+# Definition of Constants
 UTF8_ENCODING = "utf8"
 LANG_UNDEFINED = "Undefined"
 HASHTAG_COUNTER_PROP = "hashtag_prop"
@@ -45,7 +45,7 @@ def parse_arguments(argv):
     config_path = ""
     data_path = ""
 
-    # Try to parse command line arguments
+    # Parse command line arguments
     try:
         opts, args = getopt.getopt(argv, CMD_LINE_DEFINED_ARGUMENTS)
     except getopt.GetoptError as error:
@@ -73,7 +73,7 @@ def load_language_config(file_path):
                 config_content = json.loads(fstream.read())
                 return config_content[JSON_LANGUAGES_PROPERTY]
             except Exception as exception:
-                print("Error occurred during loading language configuration. Exception: %s" %exception)
+                print("Error occurred during loading language configuration file. Exception: %s" %exception)
     else:
         print("The language configuration file does not exist. Path: %s", file_path)
 
@@ -87,7 +87,7 @@ def print_analysis_result(hashtag_counter, lang_counter, lang_config):
     print("\nTop 10 most commonly used languages:")
     for i, lang in enumerate(lang_counter):
         lang_name = ""
-        lang_code = lang[0];
+        lang_code = lang[0]
 
         if lang_code in lang_config:
             lang_name = lang_config[lang_code]
