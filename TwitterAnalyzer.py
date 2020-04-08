@@ -134,7 +134,7 @@ def process_twitter_data(rank, data_path, processor_size):
                         else:
                             print("Ignore header line.")
             except Exception as exception:
-                print("Error occurred during processing twitter data from [%d] rank. Exception: %s" %(rank, exception))
+                print("Error occurred processing twitter data from [%d] rank. Exception: %s" %(rank, exception))
     else:
         print("The twitter data file does not exist. Path: %s", data_path)
 
@@ -149,7 +149,7 @@ def marshall_tweets(comm):
     # Get the processor size
     processor_size = comm.Get_size()
 
-    # Now ask all processes except oursevles to return analyzed data
+    # Now ask all processes except current to return analyzed data
     for i in range(processor_size - 1):
         # Send request
         comm.send(RETURN_DATA_REQ, dest = (i + 1), tag = (i + 1))
@@ -174,15 +174,15 @@ def perform_tasks_master_node(comm, file_path):
     hashtag_counter, lang_counter = process_twitter_data(rank, file_path, processor_size)
 
     if processor_size > 1:
-        # Gather hashtag and language counter from all salve nodes
+        # Gather hashtag and language counter from all slave nodes
         print("Gathering analyzed data from all processors...")
         slave_hashtag_counter, slave_lang_counter = marshall_tweets(comm)
         
-        # Put counters received from slave nodes to final counter results
+        # Add counters received from slave nodes to final counter results
         hashtag_counter += slave_hashtag_counter
         lang_counter += slave_lang_counter
 
-        # Turn everything off
+        # Stop all processors
         print("Sending exit request to all processors...")
         for i in range(processor_size - 1):
             # Send exit request
@@ -205,7 +205,7 @@ def perform_tasks_slave_nodes(comm, file_path):
     analyzed_counters[HASHTAG_COUNTER_PROP] = hashtag_counter
     analyzed_counters[LANG_COUNTER_PROP] = lang_counter
 
-    # Now that we have our counts then wait to see when we return them.
+    # Now that we have our counts then wait to see when we return them
     while True:
         request_command = comm.recv(source = MASTER_RANK, tag = rank)
         # Check command type
@@ -221,7 +221,7 @@ def main(args):
     comm = MPI.COMM_WORLD
     rank = comm.Get_rank()
 
-    # Parse command line arguments to get language configuration and twitter data files.
+    # Parse command line arguments to get language configuration and twitter data files
     config_path, data_path = parse_arguments(args)
 
     if (not data_path):
@@ -242,7 +242,7 @@ def main(args):
                     hashtag_counter.most_common(TOP_MOST_COMMON),
                     lang_counter.most_common(TOP_MOST_COMMON), lang_config)
         else:
-            # Perform tasks for slave nodes.
+            # Perform analysis tasks for slave nodes
             perform_tasks_slave_nodes(comm, data_path)
 
 # Run the actual program
