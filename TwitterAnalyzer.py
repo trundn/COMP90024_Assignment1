@@ -1,14 +1,14 @@
-# Message Passing Interface (MPI) standard libraries
+# Message Passing Interface (MPI) standard library
 from mpi4py import MPI
-# Libraries to count hashable objects
+# Library to count hashable objects
 from collections import Counter
 # Regular expression operations library
 import re
-# Using libraries for system dependent functionalities
+# Using library for system dependent functionalities
 import os
-# Libraries for command line argument parsing
+# Library for command line argument parsing
 import sys, getopt
-# JSON parsing and time calculation libraries
+# JSON parsing and time calculation library
 import json, time
 
 # Definition of Constants
