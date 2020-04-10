@@ -1,0 +1,45 @@
+Analyzing twitter data...
+Failed to decode JSON content from [4] rank. Error: Expecting value: line 1 column 1 (char 0)
+Processed tweet: ]}
+
+Performing analysis tasks on master node...
+Ignore header line.
+Gathering analyzed data from all processors...
+Received analyzed data from [1] rank.
+Received analyzed data from [2] rank.
+Received analyzed data from [3] rank.
+Received analyzed data from [4] rank.
+Received analyzed data from [5] rank.
+Received analyzed data from [6] rank.
+Received analyzed data from [7] rank.
+Sending exit request to all processors...
+
+Top 10 most commonly used hashtags:
+1. #auspol, 19,878
+2. #coronavirus, 10,110
+3. #มาพ่องเพิ่งอะไร, 7,531
+4. #firefightaustralia, 6,812
+5. #oldme, 6,418
+6. #sydney, 6,196
+7. #scottyfrommarketing, 5,185
+8. #grammys, 5,085
+9. #assange, 4,689
+10. #sportsrorts, 4,516
+
+Top 10 most commonly used languages:
+1. English (en), 3,107,116
+2. Undefined (und), 252,117
+3. Thai (th), 134,571
+4. Portuguese (pt), 125,858
+5. Spanish (es), 74,028
+6. Japanese (ja), 49,929
+7. Tagalog (tl), 44,560
+8. Hindi (in), 42,296
+9. French (fr), 38,098
+10. Arabic (ar), 24,501
+
+Total processing time is : 127.2743 seconds
+
+real	2m7.465s
+user	15m59.078s
+sys	0m59.636s
