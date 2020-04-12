@@ -165,20 +165,20 @@ def marshall_tweets(comm):
 
     return hashtag_counter, lang_counter
 
-def perform_tasks_master_node(comm, file_path):
+def perform_tasks_master_processor(comm, file_path):
     rank = comm.Get_rank()
     processor_size = comm.Get_size()
 
-    # Extract hashtag and language from tweet data in master node
-    print("Performing analysis tasks on master node...")
+    # Extract hashtag and language from tweet data in master processor
+    print("Performing analysis tasks on master processor...")
     hashtag_counter, lang_counter = process_twitter_data(rank, file_path, processor_size)
 
     if processor_size > 1:
-        # Gather hashtag and language counter from all slave nodes
-        print("Gathering analyzed data from all processors...")
+        # Gather hashtag and language counter from all slave processors
+        print("Gathering analyzed data from slave processors...")
         slave_hashtag_counter, slave_lang_counter = marshall_tweets(comm)
         
-        # Add counters received from slave nodes to final counter results
+        # Add counters received from slave processors to final counter results
         hashtag_counter += slave_hashtag_counter
         lang_counter += slave_lang_counter
 
@@ -191,17 +191,17 @@ def perform_tasks_master_node(comm, file_path):
     # Return all counters
     return hashtag_counter, lang_counter
 
-def perform_tasks_slave_nodes(comm, file_path):
+def perform_tasks_slave_processor(comm, file_path):
     rank = comm.Get_rank()
     processor_size = comm.Get_size()
 
     # Initialise analyzed counters
     analyzed_counters = {}
 
-    # Extract hashtag and language from tweet data in slave node
+    # Extract hashtag and language from tweet data in slave processor
     hashtag_counter, lang_counter = process_twitter_data(rank, file_path, processor_size)
 
-    # Put all counters in dictionary in order to send back to master node
+    # Put all counters in dictionary in order to send back to master processor
     analyzed_counters[HASHTAG_COUNTER_PROP] = hashtag_counter
     analyzed_counters[LANG_COUNTER_PROP] = lang_counter
 
@@ -211,7 +211,7 @@ def perform_tasks_slave_nodes(comm, file_path):
         # Check command type
         if isinstance(request_command, str):
             if request_command in (RETURN_DATA_REQ):
-                # Send data back to master node
+                # Send data back to master processor
                 comm.send(analyzed_counters, dest = MASTER_RANK, tag = MASTER_RANK)
             elif request_command in (EXIT_REQ):
                 exit(0)
@@ -234,16 +234,16 @@ def main(args):
                 # Load language configuration file
                 lang_config = load_language_config(config_path)
                 
-                # Perform analysis tasks for master node and gather result from slave nodes
-                hashtag_counter, lang_counter = perform_tasks_master_node(comm, data_path)
+                # Perform analysis tasks for master processor and gather result from slave processors
+                hashtag_counter, lang_counter = perform_tasks_master_processor(comm, data_path)
                 
                 # Print analysis result to console
                 print_analysis_result(
                     hashtag_counter.most_common(TOP_MOST_COMMON),
                     lang_counter.most_common(TOP_MOST_COMMON), lang_config)
         else:
-            # Perform analysis tasks for slave nodes
-            perform_tasks_slave_nodes(comm, data_path)
+            # Perform analysis tasks for slave processor
+            perform_tasks_slave_processor(comm, data_path)
 
 # Run the actual program
 if __name__ == "__main__":
